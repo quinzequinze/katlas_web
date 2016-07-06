@@ -1,5 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
+
+<!-- HEAD -->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -16,155 +18,193 @@
 
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
+<!-- HEAD -->
+
+<!-- BODY -->
     <body>
+
+    <!-- PAGE ELEMENTS -->
+        <div id="container"></div>
+        <div id="blocPage">
+            <!-- SHOWREEL -->
+            <div id="video">
+                <div class="aspect-ratio" id="showReel">
+                    <iframe  
+                        allowfullscreen="" 
+                        frameborder="0" 
+                        control="no-control" 
+                        mozallowfullscreen="" 
+                        src="https://player.vimeo.com/video/161408646" 
+                        webkitallowfullscreen="">
+                    </iframe>
+                </div> 
+            </div>
+            <!-- SHOWREEL -->
+            <!-- CENTRAL BUTTON -->
+            <div id="centralButton">
+                <div id="contactButton">
+                    <h2>Contacts</h2>
+                </div>
+                <div id="aboutButton">
+                    <h2>About</h2>
+                </div>
+                <div id="showRealButton">
+                    <h2>ShowReal</h2>
+                </div>
+                <!-- ABOUT -->
+                <div id="about">
+                    <h2>About</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>    
+                </div>
+                <!-- ABOUT -->
+                <!-- ABOUT -->
+                <div id="contact">
+                    <h2>Contact</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>    
+                </div>
+                <!-- ABOUT -->
+            </div>
+            <!-- CENTRAL BUTTON -->
+        </div>    
+        <!-- PAGE ELEMENTS -->
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div id="container"></div>
+    <!-- PAGE ELEMENTS -->  
+
+    <!-- SCRIPTS -->
+        <script src="js/Tween.js"></script>
+        <script src="js/flexibility.js"></script>
         <script src="js/Three.js"></script>
-<script src="js/MarchingCubes.js"></script>
-<script src="js/Stats.js"></script>
-<script src="js/ThreeRenderStats.js"></script>
-<script src="js/ImprovedNoise.js"></script>
-
-
-<script type="x-shader/x-vertex" id="rim-vs">
-
-    varying vec3 vNormal;
-    varying vec3 vEye;
-
-    void main() {
-
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-        vNormal = normalize( normalMatrix * normal );
-        vEye = ( modelViewMatrix * vec4( position, 1.0 ) ).xyz;
-
-    }
-
-</script>
-
-<script type="x-shader/x-fragment" id="rim-fs">
-
-    varying vec3 vNormal;
-    varying vec3 vEye;
-
-    void main() {
-    
-        float f = 2. * abs( dot( vNormal, normalize( vEye ) ) );
-        f = .2 * ( 1. - smoothstep( 0.0, 1., f ) );
-        gl_FragColor = vec4( 1., 1., 1., f );
-
-    }
-
-</script>
-
-<script type="x-shader/x-vertex" id="vertexShader">
-
-    varying vec3 vNormal;
-    varying vec4 vPosition;
-    varying vec4 vOPosition;
-    varying vec3 vONormal;
-    varying vec3 vU;
-    varying vec3 vEye;
-
-    void main() {
-
-        vOPosition = modelViewMatrix * vec4( position, 1.0 );
-        gl_Position = projectionMatrix * vOPosition;
-
-        vU = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
-
-        vPosition = vec4( position, 1.0 );
-        vNormal = normalMatrix * normal;
-        vONormal = normal;
-
-    }
-
-    </script>
-    
-    <script type="x-shader/x-vertex" id="fragmentShader">
-    
-    uniform sampler2D textureMap;
-    uniform sampler2D normalMap;
-    uniform vec3 color;
-    uniform float normalScale;
-    uniform float texScale;
-    uniform float useSSS;
-    uniform float useScreen;
-
-    varying vec3 vNormal;
-    varying vec4 vPosition;
-    varying vec4 vOPosition;
-    varying vec3 vONormal;
-    varying vec3 vU;
-    varying vec3 vEye;
-
-    float random(vec3 scale,float seed){return fract(sin(dot(gl_FragCoord.xyz+seed,scale))*43758.5453+seed);}
-
-    void main() {
-
-        vec3 n = normalize( vONormal.xyz );
-        vec3 blend_weights = abs( n );
-        blend_weights = ( blend_weights - 0.2 ) * 7.;  
-        blend_weights = max( blend_weights, 0. );
-        blend_weights /= ( blend_weights.x + blend_weights.y + blend_weights.z );
-
-        vec2 coord1 = vPosition.yz * texScale;
-        vec2 coord2 = vPosition.zx * texScale;
-        vec2 coord3 = vPosition.xy * texScale;
-
-        vec3 bump1 = texture2D( normalMap, coord1 ).rgb;  
-        vec3 bump2 = texture2D( normalMap, coord2 ).rgb;  
-        vec3 bump3 = texture2D( normalMap, coord3 ).rgb; 
-
-        vec3 blended_bump = bump1 * blend_weights.xxx +  
-                            bump2 * blend_weights.yyy +  
-                            bump3 * blend_weights.zzz;
-
-        vec3 tanX = vec3( vNormal.x, -vNormal.z, vNormal.y);
-        vec3 tanY = vec3( vNormal.z, vNormal.y, -vNormal.x);
-        vec3 tanZ = vec3(-vNormal.y, vNormal.x, vNormal.z);
-        vec3 blended_tangent = tanX * blend_weights.xxx +  
-                               tanY * blend_weights.yyy +  
-                               tanZ * blend_weights.zzz; 
-
-        vec3 normalTex = blended_bump * 2.0 - 1.0;
-        normalTex.xy *= normalScale;
-        normalTex.y *= -1.;
-        normalTex = normalize( normalTex );
-        mat3 tsb = mat3( normalize( blended_tangent ), normalize( cross( vNormal, blended_tangent ) ), normalize( vNormal ) );
-        vec3 finalNormal = tsb * normalTex;
-
-        vec3 r = reflect( normalize( vU ), normalize( finalNormal ) );
-        float m = 2.0 * sqrt( r.x * r.x + r.y * r.y + ( r.z + 1.0 ) * ( r.z + 1.0 ) );
-        vec2 calculatedNormal = vec2( r.x / m + 0.5,  r.y / m + 0.5 );
-
-        vec3 base = texture2D( textureMap, calculatedNormal ).rgb;
-
-        float rim = 1.75 * max( 0., abs( dot( normalize( vNormal ), normalize( -vOPosition.xyz ) ) ) );
-        base += useSSS * color * ( 1. - .75 * rim );
-        base += ( 1. - useSSS ) * 10. * base * color * clamp( 1. - rim, 0., .15 );
-
-        if( useScreen == 1. ) {
-            base = vec3( 1. ) - ( vec3( 1. ) - base ) * ( vec3( 1. ) - base );
-        }
-
-        float nn = .05 * random( vec3( 1. ), length( gl_FragCoord ) );
-        base += vec3( nn );
-
-        gl_FragColor = vec4( base.rgb, 1. );
-
-    }
-    
-    </script>
-
+        <script src="js/MarchingCubes.js"></script>
+        <script src="js/Stats.js"></script>
+        <script src="js/ThreeRenderStats.js"></script>
+        <script src="js/ImprovedNoise.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script>
-        window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
+        <script src="https://player.vimeo.com/api/player.js"></script>
+        <script src="js/videoManager.js"></script>
         <script src="js/main.js"></script>
+        
 
+        <script type="x-shader/x-vertex" id="vertexShader">
+
+            varying vec3 vNormal;
+            varying vec4 vPosition;
+            varying vec4 vOPosition;
+            varying vec3 vONormal;
+            varying vec3 vU;
+            varying vec3 vEye;
+
+            void main() {
+
+                vOPosition = modelViewMatrix * vec4( position, 1.0 );
+                gl_Position = projectionMatrix * vOPosition;
+
+                vU = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
+
+                vPosition = vec4( position, 1.0 );
+                vNormal = normalMatrix * normal;
+                vONormal = normal;
+
+            }
+
+        </script>
+    
+        <script type="x-shader/x-vertex" id="fragmentShader">
+        
+            uniform sampler2D textureMap;
+            uniform sampler2D normalMap;
+            uniform vec3 color;
+            uniform float normalScale;
+            uniform float texScale;
+            uniform float useSSS;
+            uniform float useScreen;
+
+            varying vec3 vNormal;
+            varying vec4 vPosition;
+            varying vec4 vOPosition;
+            varying vec3 vONormal;
+            varying vec3 vU;
+            varying vec3 vEye;
+
+            float random(vec3 scale,float seed){return fract(sin(dot(gl_FragCoord.xyz+seed,scale))*43758.5453+seed);}
+
+            void main() {
+
+                vec3 n = normalize( vONormal.xyz );
+                vec3 blend_weights = abs( n );
+                blend_weights = ( blend_weights - 0.2 ) * 7.;  
+                blend_weights = max( blend_weights, 0. );
+                blend_weights /= ( blend_weights.x + blend_weights.y + blend_weights.z );
+
+                vec2 coord1 = vPosition.yz * texScale;
+                vec2 coord2 = vPosition.zx * texScale;
+                vec2 coord3 = vPosition.xy * texScale;
+
+                vec3 bump1 = texture2D( normalMap, coord1 ).rgb;  
+                vec3 bump2 = texture2D( normalMap, coord2 ).rgb;  
+                vec3 bump3 = texture2D( normalMap, coord3 ).rgb; 
+
+                vec3 blended_bump = bump1 * blend_weights.xxx +  
+                                    bump2 * blend_weights.yyy +  
+                                    bump3 * blend_weights.zzz;
+
+                vec3 tanX = vec3( vNormal.x, -vNormal.z, vNormal.y);
+                vec3 tanY = vec3( vNormal.z, vNormal.y, -vNormal.x);
+                vec3 tanZ = vec3(-vNormal.y, vNormal.x, vNormal.z);
+                vec3 blended_tangent = tanX * blend_weights.xxx +  
+                                       tanY * blend_weights.yyy +  
+                                       tanZ * blend_weights.zzz; 
+
+                vec3 normalTex = blended_bump * 2.0 - 1.0;
+                normalTex.xy *= normalScale;
+                normalTex.y *= -1.;
+                normalTex = normalize( normalTex );
+                mat3 tsb = mat3( normalize( blended_tangent ), normalize( cross( vNormal, blended_tangent ) ), normalize( vNormal ) );
+                vec3 finalNormal = tsb * normalTex;
+
+                vec3 r = reflect( normalize( vU ), normalize( finalNormal ) );
+                float m = 2.0 * sqrt( r.x * r.x + r.y * r.y + ( r.z + 1.0 ) * ( r.z + 1.0 ) );
+                vec2 calculatedNormal = vec2( r.x / m + 0.5,  r.y / m + 0.5 );
+
+                vec3 base = texture2D( textureMap, calculatedNormal ).rgb;
+
+                float rim = 1.75 * max( 0., abs( dot( normalize( vNormal ), normalize( -vOPosition.xyz ) ) ) );
+                base += useSSS * color * ( 1. - .75 * rim );
+                base += ( 1. - useSSS ) * 10. * base * color * clamp( 1. - rim, 0., .15 );
+
+                if( useScreen == 1. ) {
+                    base = vec3( 1. ) - ( vec3( 1. ) - base ) * ( vec3( 1. ) - base );
+                }
+
+                float nn = .05 * random( vec3( 1. ), length( gl_FragCoord ) );
+                base += vec3( nn );
+
+                gl_FragColor = vec4( base.rgb, 1. );
+
+            }
+        
+        </script>
+
+        <script>
+            window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')
+        </script>
+        
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -177,4 +217,6 @@
  -->
 
     </body>
+<!-- BODY -->
+
 </html>
