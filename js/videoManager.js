@@ -3,6 +3,7 @@ var player = new Vimeo.Player(iframe);
 var videoWidth = 0;
 var videoHeight = 0;
 var videoRatio = 0;
+var annimTime = 2300;
 
 $(document).ready(function() {
     $(window).resize(function() {
@@ -32,18 +33,18 @@ $(document).ready(function() {
 function videoInAnnimation () {
     hideThreeJsOnVideoIn();
     $("#centralButton").css( {display: "none"} )
-    $("#about").css( {display: "none"} )
-    $("#contact").css( {display: "none"} )
+    $(".textZone").css( {display: "none"} )
     $("#video").css( {width: "0%",height: "80%", display: "flex", "z-index": "9999"} );
     $("#video").hide();
-    $("#video").show(2500);
-    $("#video").animate({width: "80%"},{easing:"swing", duration: 2300, complete:playVideo});
+    $("#video").show(500);
+
+    $("#video").animate({width: "80%"},{easing:"swing", duration: annimTime, complete:playVideo});
     player.on('timeupdate', onVideoUpdate);
 
 }
 
 function videoOutAnnimation () {
-    $("#video").animate({height: "0%"},{easing:"swing", duration: 2300, complete:unHideThreeJsOnVideoOut});
+    $("#video").animate({height: "0%"},{easing:"swing", duration: annimTime, complete:unHideThreeJsOnVideoOut});
 }
 
 function playVideo () {

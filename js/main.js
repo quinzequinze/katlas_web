@@ -8,14 +8,20 @@ var fov = 90
 var material
 var start = Date.now()+10
 var numBlobs = 70
+var contactButton = document.getElementById('contactButton')
+var aboutButton = document.getElementById('aboutButton')
+var showReelButton = document.getElementById('showReelButton')
+
 
 window.addEventListener('load', init)
 
 function init () {
   container = document.getElementById('container')
-  contactButton = document.getElementById('contactButton')
-  aboutButton = document.getElementById('aboutButton')
-  showRealButton = document.getElementById('showRealButton')
+  
+
+  window.addEventListener('resize', onWindowResize, false)
+  setEventListeners()
+
   scene = new THREE.Scene()
   scene.position = new THREE.Vector3(0, 0, 0)
   camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.01, 100000)
@@ -37,11 +43,6 @@ function init () {
   renderer.gammaOutput = true
   renderer.physicallyBasedShading = true
   container.appendChild(renderer.domElement)
-
-  window.addEventListener('resize', onWindowResize, false)
-  showRealButton.addEventListener('click', displayShowReel, false)
-  aboutButton.addEventListener('click', displayAbout, false)
-  contactButton.addEventListener('click', displayContact, false)
 
   material = new THREE.ShaderMaterial({
     uniforms: {
@@ -102,6 +103,26 @@ function init () {
   render()
 }
 
+function setEventListeners()
+{  
+  showReelButton.addEventListener('click', displayShowReel,false)
+  aboutButton.addEventListener('click', displayAbout,false)
+  // aboutButton.addEventListener('click', 
+  //   function() 
+  //   {
+  //     displayTextZone("about",100)
+  //   }, 
+  //   false)
+  contactButton.addEventListener('click', displayContact, false)
+}
+
+function removeEventListeners()
+{
+  showReelButton.removeEventListener('click', displayShowReel, false)
+  aboutButton.removeEventListener('click', displayAbout, false)
+  contactButton.removeEventListener('click', displayContact, false)
+}
+
 function updateCubes (object, time, numblobs, floor) {
   object.reset()
   var i, ballx, bally, ballz
@@ -130,7 +151,7 @@ function render () {
 
 function displayShowReel()
 {
-
+  removeEventListeners()
   if (camera.position.x == 0) {
     hideThreeJsOnVideoIn();
     videoInAnnimation()
@@ -154,6 +175,49 @@ function displayShowReel()
   }
   
 }
+
+function displayAbout () {
+  removeEventListeners()
+  var position = { x : camera.position.x};
+  var target = { x : 100};
+
+  var tween = new TWEEN.Tween(position).to(target, 2500);
+
+  tween.onUpdate(function(){
+      camera.position.x = position.x;
+  });
+
+  tween.easing(TWEEN.Easing.Cubic.InOut)
+  tween.start()
+
+  tween.onComplete(function(){
+      $("#about").css( {display: "flex"} )
+      $("#contact").css( {display: "none"} )
+      setEventListeners()
+  });
+}
+
+function displayContact () {
+  removeEventListeners()
+  var position = { x : camera.position.x};
+  var target = { x : -100};
+
+  var tween = new TWEEN.Tween(position).to(target, 2500);
+
+  tween.onUpdate(function(){
+      camera.position.x = position.x;
+  });
+  
+  tween.easing(TWEEN.Easing.Cubic.InOut)
+  tween.start()
+
+  tween.onComplete(function(){
+      $("#contact").css( {display: "flex"} )
+      $("#about").css( {display: "none"} )
+      setEventListeners()
+  }); 
+}
+
 
 function hideThreeJsOnVideoIn()
 {
@@ -191,49 +255,9 @@ function unHideThreeJsOnVideoOut()
   tween.onComplete(function(){
       $("#centralButton").css( {display: "flex"} )
       $("#video").css( {display: "none"} )
+      setEventListeners()
   });
   
 }
 
-function displayAbout () {
-  var position = { x : camera.position.x};
-  var target = { x : 100};
-
-  var tween = new TWEEN.Tween(position).to(target, 2500);
-
-  tween.onUpdate(function(){
-      camera.position.x = position.x;
-  });
-
-  tween.easing(TWEEN.Easing.Cubic.InOut)
-  tween.start()
-
-  tween.onComplete(function(){
-      $("#about").css( {display: "flex"} )
-      $("#contact").css( {display: "none"} )
-  });
-
-  
-}
-
-function displayContact () {
-  var position = { x : camera.position.x};
-  var target = { x : -100};
-
-  var tween = new TWEEN.Tween(position).to(target, 2500);
-
-  tween.onUpdate(function(){
-      camera.position.x = position.x;
-  });
-  
-  tween.easing(TWEEN.Easing.Cubic.InOut)
-  tween.start()
-
-  tween.onComplete(function(){
-      $("#contact").css( {display: "flex"} )
-      $("#about").css( {display: "none"} )
-  });
-
-  
-}
 

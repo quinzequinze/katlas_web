@@ -13,7 +13,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: orange;
+    background: black;
 }
 
 #blocPage
@@ -39,29 +39,16 @@ body {
     box-shadow: 5px 5px 5px white;
     border-style: solid; 
 
+
 }
-#contactButton
+.myBtn
 {
+    background-color: Transparent;
     margin: 10px;
+    border: none;
 }
 
-#aboutButton
-{
-    margin: 10px;
-    
-}
-
-#showRealButton
-{
-    margin: 10px;
-}
-
-#about
-{
-    -js-display: flex;
-    display: none;
-}
-#contact
+.textZone
 {
     -js-display: flex;
     display: none;
