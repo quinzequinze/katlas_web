@@ -14,9 +14,9 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/style.css">
-
+        <script src="js/vendor/device.min.js"></script>
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
     </head>
 <!-- HEAD -->
 
@@ -81,19 +81,39 @@
     <!-- PAGE ELEMENTS -->  
 
     <!-- SCRIPTS -->
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="js/flexibility.js"></script>
+<script type="text/javascript">
+if (device.desktop()) {
+$("head").append("<link rel='stylesheet' type='text/css' href='css/desktop.css' />");
+
+  $.getScript('js/Three.js')
+  $.getScript('js/Tween.js')
+  $.getScript('js/MarchingCubes.js')
+  $.getScript('js/Stats.js')
+  $.getScript('js/ThreeRenderStats.js')
+  $.getScript('js/ImprovedNoise.js')
+  $.getScript('https://player.vimeo.com/api/player.js')
+  $.getScript('js/videoManager.js')
+  $.getScript('js/main.js')
+}else{
+    $("head").append("<link rel='stylesheet' type='text/css' href='css/mobile.css' />");
+
+}
+</script>
+        <!--
         <script src="js/Tween.js"></script>
-        <script src="js/flexibility.js"></script>
+        
         <script src="js/Three.js"></script>
         <script src="js/MarchingCubes.js"></script>
         <script src="js/Stats.js"></script>
         <script src="js/ThreeRenderStats.js"></script>
         <script src="js/ImprovedNoise.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="js/plugins.js"></script>
         <script src="https://player.vimeo.com/api/player.js"></script>
         <script src="js/videoManager.js"></script>
         <script src="js/main.js"></script>
-        
+        -->
 
         <script type="x-shader/x-vertex" id="vertexShader">
 
